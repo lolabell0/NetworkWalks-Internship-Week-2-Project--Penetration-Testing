@@ -1,1 +1,178 @@
-# NetworkWalks-Internship-Week-2-Project--Penetration-Testing
+# Penetration Testing Report: Footprinting & Network Scanning
+
+**W2-PM-FINAL | Cybersecurity | Networkwalks**
+
+| | |
+|---|---|
+| **Pentester** | Damilola Bello  |
+| **Program / Batch** | B084 - Networkwalks |
+| **Date** | 12 November 2026 |
+| **Modules completed** | W2-PM1 (Multiple Kali Tools), W2-PM5 (Zenmap Scanning) |
+| **Client / Target** | 1. Networkwalks (written permission secured)<br>2. My own local LAN network |
+| **Permission secured from client?** | Yes |
+| **Phases covered** | Phase 1: Reconnaissance & Footprinting<br>Phase 2: Scanning & Network Discovery<br>Phases 3-5: In progress |
+
+---
+
+## 1. Liability Disclaimer
+
+I performed these activities only on systems and devices where I had secured written permission and systems that I own myself. All materials here are for education and research purposes only. 
+---
+
+## 2. Introduction
+
+This report covers footprinting the `networkwalks.com` domain using multiple Kali Linux tools (W2-PM1) and scanning my own local network with Zenmap (W2-PM5). One module covers the footprinting phase and the other covers the scanning phase, so together they show how an attacker moves from gathering public information to mapping live hosts on a network. It is the Week 2 part of my ongoing internship program at Networkwalks.
+
+All commands were run in Kali Linux (footprinting) and on a Windows PC with Zenmap installed (scanning). Every step includes the command used, the result observed, a screenshot as evidence, and a short note on why the finding matters from an attacker's point of view.
+
+---
+
+## 3. Tools Used
+
+| Tool | Purpose |
+|---|---|
+| Kali Linux & Windows | Operating systems used for reconnaissance activities |
+| WHOIS | Find domain registration details (owner, dates, name servers) |
+| whatweb | Fingerprint web technologies (server, CMS, plugins, IP) |
+| nslookup | Resolve the domain name to its IP address using DNS |
+| curl -I | Read the HTTP response headers of the website |
+| wafw00f | Detect whether a Web Application Firewall protects the site |
+| dnsrecon | Enumerate DNS records |
+| Zenmap (Nmap GUI) | Scan the local subnet to find live hosts, IPs and MAC addresses |
+| Windows CMD | Local IP and MAC address identification |
+
+---
+
+## 4. Activities Performed
+
+### 4.1 Footprinting & Reconnaissance
+
+I performed reconnaissance against the networkwalks.com domain using six Kali Linux tools: WHOIS, WhatWeb, Nslookup, Curl, Wafw00f and DNSRecon. Each tool was used to collect a different type of information about the target.
+
+First, I used WHOIS to obtain publicly available domain registration information and identify the domain's name servers. The results provided information about the domain registration and hosting infrastructure.
+
+I then used WhatWeb to identify technologies used by the website. The results identified WordPress 7.1.4 and WP Download Manager 3.3.76, along with other information exposed by the website.
+
+Using Nslookup, I resolved the domain name to its IP address. The provided result identified 192.232.216.135.
+
+I used Curl with the -I option to inspect the HTTP response headers. This provided additional information about the web application and exposed the WordPress REST API endpoint /wp-json/.
+
+Next, I used Wafw00f to determine whether a Web Application Firewall was protecting the website. The result identified ModSecurity (SpiderLabs).
+
+Finally, I used DNSRecon to enumerate DNS records. The results provided information relating to name servers, mail servers, SPF/TXT records, service records and DNS software information.
+
+### 4.2 Network Scanning with Zenmap
+
+For the second activity, I used Zenmap to perform network discovery on my local network. The practical required me to identify my local IP address and subnet, discover live hosts, identify their IP and MAC addresses, and generate a network topology.
+
+I first used the Windows ipconfig command to identify my local IP address and LAN subnet. I then entered the subnet into Zenmap and selected Ping Scan to identify active hosts.
+
+The example results provided in the practical identified four live hosts:
+
+- 192.168.100.1
+- 192.168.100.35
+- 192.168.100.36
+- 192.168.100.39
+- 192.168.100.38
+
+The example results also included four MAC addresses.
+
+After completing the scan, I opened the Topology section in Zenmap, enabled the legend and saved the network topology in PDF format as required by the practical task.
+
+---
+
+## 5. Risk Analysis / Impact
+
+| # | Risk / Finding | Evidence / Observation | Potential Impact | Risk Level |
+|---|---|---|---|---|
+| 1 | Web technology information exposed | WhatWeb identified WordPress and WP Download Manager | Attackers may use exposed technology/version information to identify software requiring further security review | Medium |
+| 2 | Server IP address identifiable | Nslookup resolved the domain to 192.232.216.135 | Provides information about the network location of the web service | Low |
+| 3 | HTTP technical information exposed | Curl returned HTTP response headers and exposed `/wp-json/` | May assist technology fingerprinting and further enumeration | Low |
+| 4 | WAF technology identifiable | Wafw00f identified ModSecurity (SpiderLabs) | Reveals information about the web application's security architecture | Low |
+| 5 | DNS infrastructure information exposed | DNSRecon identified DNS, mail and service-related records | DNS information can help build a broader infrastructure profile | Medium |
+| 6 | Multiple live hosts visible on local network | Zenmap identified four live hosts in the example network | Unknown or unauthorized devices may potentially be present on a network | Medium |
+
+**Risk level key:** Critical, Medium, Low
+
+---
+
+## 6. Recommendations
+
+1. **Review publicly exposed technology information.** Regularly review what information about web technologies, CMS and plugins is publicly visible.
+2. **Keep software updated.** CMS platforms, plugins and other web technologies should be updated regularly and reviewed against current security advisories.
+3. **Review HTTP headers.** Check whether unnecessary technical information is being exposed.
+4. **Review DNS records regularly.** Make sure only required information and services are publicly exposed.
+5. **Properly configure and monitor the WAF.** Keep the WAF (ModSecurity) enabled and tuned, since it already blocks naive attacks.
+6. **Perform regular internal network discovery.** Periodically scan your own networks to identify active devices.
+7. **Investigate unknown devices.** Any unexpected device discovered during scanning should be investigated and verified.
+8. **Maintain network documentation.** Document and regularly update network topology and device information.
+9. **Perform security testing with authorization.** Reconnaissance and scanning should only be performed against systems and networks where appropriate authorization has been provided.
+
+---
+
+## 7. Conclusion
+
+During Week 2 of my Cybersecurity & Ethical Hacking internship, I completed practical activities covering footprinting, reconnaissance and network scanning.
+
+In the footprinting activity, I used six Kali Linux tools to collect information about the target domain. I learned how WHOIS can provide domain information, WhatWeb can identify web technologies, Nslookup can resolve domain names, Curl can inspect HTTP headers, Wafw00f can identify a WAF, and DNSRecon can provide additional DNS information.
+
+In the network scanning activity, I used Zenmap to identify my local network configuration and discover active hosts. I also collected IP and MAC address information and created a network topology.
+
+The exercises showed me that information gathering is an important part of cybersecurity. Even before attempting to exploit a system, a security professional can learn a significant amount about an environment by carefully analyzing publicly available information and network responses.
+
+I also learned that technical findings should be documented clearly. A good cybersecurity report should explain what was performed, what was discovered, what the observation means, what risk it may create, and what can be done to reduce that risk.
+
+Finally, I learned that reconnaissance and scanning must always be performed within an authorized scope. These activities were completed as part of the assigned educational cybersecurity lab.
+
+---
+
+## 8. Evidence Collected
+
+Upload your screenshots into a folder named `images` in this repository, using the file names below, and they will appear here automatically.
+
+**WHOIS lookup**
+<img width="565" height="454" alt="Screenshot1" src="https://github.com/user-attachments/assets/f89e88c2-e584-489f-ba60-c5c0a0fec6d1" />
+
+
+**WhatWeb scan**
+<img width="959" height="94" alt="Screenshot 2" src="https://github.com/user-attachments/assets/c39384d9-8f2b-40e6-b7c4-927eee35fa4a" />
+
+
+**Nslookup**
+
+<img width="392" height="83" alt="screenshot3" src="https://github.com/user-attachments/assets/6b4d02a7-7afc-429e-a740-db5e9345a202" />
+
+
+**Curl HTTP headers**
+<img width="951" height="117" alt="screenshot 4" src="https://github.com/user-attachments/assets/dbecc9be-fcb7-40db-8fe8-5502607edfb4" />
+
+**Wafw00f WAF detection**
+
+<img width="959" height="333" alt="screenshot 5" src="https://github.com/user-attachments/assets/1f636517-ab83-4eaa-b152-69a91e776588" />
+
+
+**DNSRecon enumeration**
+
+<img width="619" height="114" alt="screenshot 6" src="https://github.com/user-attachments/assets/47b4653c-fdae-4c43-9efb-9f108b1ed81a" />
+
+**Zenmap ping scan**
+
+<img width="960" height="540" alt="Zenmap cature" src="https://github.com/user-attachments/assets/b9d86161-37af-47f8-8805-996b21aaa5f6" />
+
+
+**Zenmap network topology**
+
+<img width="959" height="540" alt="Zenmap Capture 2" src="https://github.com/user-attachments/assets/e545778b-041e-49b8-8316-cd12e6dddfc9" />
+
+
+---
+
+## Author
+
+**Damilola Bello**
+Cybersecurity Professional, B084
+LinkedIn: [https://www.linkedin.com/in/damilolabelloo/](https://www.linkedin.com/in/damilolabelloo/)
+
+## Project Information
+
+**Program Name:** Cybersecurity program at Networkwalks | **Week:** 02
