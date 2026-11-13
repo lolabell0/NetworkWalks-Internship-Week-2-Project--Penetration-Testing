@@ -128,7 +128,6 @@ Finally, I learned that reconnaissance and scanning must always be performed wit
 
 ## 8. Evidence Collected
 
-Upload your screenshots into a folder named `images` in this repository, using the file names below, and they will appear here automatically.
 
 **WHOIS lookup**
 <img width="565" height="454" alt="Screenshot1" src="https://github.com/user-attachments/assets/f89e88c2-e584-489f-ba60-c5c0a0fec6d1" />
